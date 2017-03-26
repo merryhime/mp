@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <tuple>
 #include <type_traits>
+#include <utility>
 
 namespace mp {
 
@@ -37,6 +38,40 @@ using false_fn = false_;
 
 namespace detail {
 
+template<class S>
+struct sequence_to_list_impl;
+
+template<template<class T, T...> class ST, class IT, IT... I>
+struct sequence_to_list_impl<ST<IT, I...>> {
+    using type = list<std::integral_constant<IT, I>...>;
+};
+
+} // namespace detail
+
+/// Convert a value sequence to a metavalue sequence
+template<class S>
+using sequence_to_list = typename detail::sequence_to_list_impl<S>::type;
+
+namespace detail {
+
+template<class L>
+struct list_to_sequence_impl;
+
+template<template<class...> class LT, class T1, class... T>
+struct list_to_sequence_impl<LT<T1, T...>> {
+    using element_type = typename T1::value_type;
+    static_assert((true && ... && std::is_same_v<typename T::value_type, element_type>));
+    using type = std::integer_sequence<element_type, T1::value, T::value...>;
+};
+
+} // namespace detail
+
+/// Convert a metavalue sequence to a value sequence
+template<class L>
+using list_to_sequence = typename detail::list_to_sequence_impl<L>::type;
+
+namespace detail {
+
 template<template<class...> class F, class L>
 struct invoke_impl;
 
@@ -53,8 +88,8 @@ using invoke = typename detail::invoke_impl<F, L>::type;
 
 template<template<class...> class F, class... A>
 struct bind {
-	template<class... T>
-	using type = F<A..., T...>;
+    template<class... T>
+    using type = F<A..., T...>;
 };
 
 /// Metafunction that returns the number of arguments it has
