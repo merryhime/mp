@@ -15,11 +15,19 @@ struct list {};
 template<class T>
 using id = T;
 
+/// Bool metatype
+template<bool V>
+using bool_mv = std::integral_constant<bool, V>;
+
 /// True metavalue
-using true_ = std::integral_constant<bool, true>;
+using true_ = bool_mv<true>;
 
 /// False metavalue
-using false_ = std::integral_constant<bool, false>;
+using false_ = bool_mv<false>;
+
+/// Size metatype
+template<std::size_t V>
+using size_mv = std::integral_constant<std::size_t, V>;
 
 /// Constant metavalue metafunction
 template<class V>
@@ -99,7 +107,7 @@ struct bind {
 
 /// Metafunction that returns the number of arguments it has
 template<class... T>
-using arg_count = std::integral_constant<std::size_t, sizeof...(T)>;
+using arg_count = size_mv<sizeof...(T)>;
 
 /// Metafunction that returns the size of list L
 template<class L> 
