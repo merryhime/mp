@@ -29,6 +29,16 @@ using false_ = bool_mv<false>;
 template<std::size_t V>
 using size_mv = std::integral_constant<std::size_t, V>;
 
+/// Lifts a function to be a metafunction
+template <auto F>
+struct lift {
+    template <class... T>
+    static constexpr auto value = F(T::value...);
+
+    template <class... T>
+    using type = std::integral_constant<decltype(value<T...>), value<T...>>;
+};
+
 /// Constant metavalue metafunction
 template<class V>
 struct constant_fn {
