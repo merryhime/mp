@@ -40,7 +40,7 @@ struct lift {
     static constexpr auto value = F(T::value...);
 
     template <class... T>
-    using type = std::integral_constant<decltype(value<T...>), value<T...>>;
+    using type = std::integral_constant<decltype(F(T::value...)), value<T...>>;
 };
 
 /// Constant metavalue metafunction
@@ -116,7 +116,7 @@ using invoke = typename detail::invoke_impl<F, L>::type;
 template<template<class...> class F, class... A>
 struct bind {
     template<class... T>
-    using type = F<A..., T...>;
+    struct type : F<A..., T...> {};
 };
 
 /// Metafunction that returns the number of arguments it has
@@ -200,7 +200,7 @@ using cdr = typename detail::carcdr_impl<L>::cdr;
 
 /// Metafunction that returns the I-th type of L
 template<std::size_t I, class L>
-using get = typename std::tuple_element<I, invoke<std::tuple, L>>;
+using get = typename std::tuple_element<I, invoke<std::tuple, L>>::type;
 
 namespace detail {
 
@@ -229,18 +229,18 @@ struct contains_impl;
 
 template <template<class...> class LT, class... Ts, class T>
 struct contains_impl<LT<Ts...>, T> {
-    using type = bool_mv<(false || ... || std::is_same_v<Ts, T>)>;
+    static constexpr bool value = (false || ... || std::is_same_v<Ts, T>);
 };
 
 } // namespace detail
 
 /// Metafunction that returns true if list L contains type T
-template <class L, class T>
-using contains = typename detail::contains_impl<L, T>::type;
+template <class L, class... T>
+constexpr bool contains_v = (true && ... && detail::contains_impl<L, T>::value);
 
 /// Metafunction that returns true if list L contains type T
-template <class L, class T>
-constexpr bool contains_v = contains<L, T>::value;
+template <class L, class... T>
+using contains = bool_mv<contains_v<L, T...>>;
 
 /// Metafunction that returns true if all elements of list L are type T
 template <class L, class T>
@@ -252,6 +252,23 @@ using all_are = bool_mv<all_are_v<L, T>>;
 
 namespace detail {
 
+template <class V>
+constexpr bool value_equals(const typename V::value_type& v) {
+    return v == V::value;
+}
+
+}
+
+/// Metafunction that returns true if all elements of list L are type T
+template <class L, class V>
+constexpr bool all_values_are_v = all_are_v<map<lift<detail::value_equals<V>>::template type, L>, true_>;
+
+/// Metafunction that returns true if all elements of list L are type T
+template <class L, class V>
+using all_values_are = bool_mv<all_values_are_v<L, V>>;
+
+namespace detail {
+
 template<typename V>
 using to_bool_mv = bool_mv<static_cast<bool>(V::value)>;
 
@@ -259,10 +276,18 @@ using to_bool_mv = bool_mv<static_cast<bool>(V::value)>;
 
 /// Metafunction that returns true if predicate F returns true for all elements of list L
 template <class L, template<class> class F>
-constexpr bool all_of_v = all_are_v<map<detail::to_bool_mv, map<F, L>>, true_>;
+constexpr bool all_of_v = all_values_are_v<map<F, L>, true_>;
 
 /// Metafunction that returns true if predicate F returns true for all elements of list L
 template <class L, template<class> class F>
 using all_of = bool_mv<all_of_v<L, F>>;
+
+/// Metafunction that returns true if all of the elements in list L are unique
+template <class L>
+constexpr bool is_a_set_v = all_values_are_v<map<bind<count, L>::template type, L>, size_mv<1>>;
+
+/// Metafunction that returns true if all of the elements in list L are unique
+template <class L>
+using is_a_set = bool_mv<is_a_set_v<L>>;
 
 } // namespace mp
