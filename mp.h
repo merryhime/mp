@@ -242,4 +242,12 @@ using contains = typename detail::contains_impl<L, T>::type;
 template <class L, class T>
 constexpr bool contains_v = contains<L, T>::value;
 
+/// Metafunction that returns true if all elements of list L are type T
+template <class L, class T>
+constexpr bool all_are_v = length<L>::value == count<L, T>::value;
+
+/// Metafunction that returns true if all elements of list L are type T
+template <class L, class T>
+using all_are = bool_mv<all_are_v<L, T>>;
+
 } // namespace mp
