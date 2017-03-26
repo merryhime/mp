@@ -64,6 +64,11 @@ struct list_to_sequence_impl<LT<T1, T...>> {
     using type = std::integer_sequence<element_type, T1::value, T::value...>;
 };
 
+template<template<class...> class LT>
+struct list_to_sequence_impl<LT<>> {
+    using type = std::integer_sequence<size_t>;
+};
+
 } // namespace detail
 
 /// Convert a metavalue sequence to a value sequence
