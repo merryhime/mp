@@ -111,6 +111,37 @@ constexpr size_t length_v = length<L>::value;
 
 namespace detail {
 
+template<class... L>
+struct concat_impl;
+
+template<>
+struct concat_impl<> {
+    using type = list<>;
+};
+
+template<class L>
+struct concat_impl<L> {
+    using type = L;
+};
+
+template<template<class...> class LT, class... T1, class... T2, class... Ls>
+struct concat_impl<LT<T1...>, LT<T2...>, Ls...> {
+    using type = typename concat_impl<LT<T1..., T2...>, Ls...>::type;
+};
+
+template<template<class...> class LT, class... T1, class... T2, class... T3, class... T4, class... T5, class... Ls>
+struct concat_impl<LT<T1...>, LT<T2...>, LT<T3...>, LT<T4...>, LT<T5...>, Ls...> {
+    using type = typename concat_impl<LT<T1..., T2..., T3..., T4..., T5...>, Ls...>::type;
+};
+
+} // namespace detail
+
+/// Concatenate lists together
+template<class... L>
+using concat = typename detail::concat_impl<L...>::type;
+
+namespace detail {
+
 template<template<class...> class F, class L>
 struct map_impl;
 
