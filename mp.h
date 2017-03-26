@@ -202,4 +202,44 @@ using cdr = typename detail::carcdr_impl<L>::cdr;
 template<std::size_t I, class L>
 using get = typename std::tuple_element<I, invoke<std::tuple, L>>;
 
+namespace detail {
+
+template <class L, class V>
+struct count_impl;
+
+template <template<class...> class LT, class... Ts, class T>
+struct count_impl<LT<Ts...>, T> {
+    using type = size_mv<(0 + ... + (std::is_same_v<Ts, T> ? 1 : 0))>;
+};
+
+} // namespace detail
+
+/// Metafunction that returns the number of occurances of T in list L
+template <class L, class T>
+using count = typename detail::count_impl<L, T>::type;
+
+/// Metafunction that returns the number of occurances of T in list L
+template <class L, class T>
+constexpr std::size_t count_v = count<L, T>::value;
+
+namespace detail {
+
+template <class L, class V>
+struct contains_impl;
+
+template <template<class...> class LT, class... Ts, class T>
+struct contains_impl<LT<Ts...>, T> {
+    using type = bool_mv<(false || ... || std::is_same_v<Ts, T>)>;
+};
+
+} // namespace detail
+
+/// Metafunction that returns true if list L contains type T
+template <class L, class T>
+using contains = typename detail::contains_impl<L, T>::type;
+
+/// Metafunction that returns true if list L contains type T
+template <class L, class T>
+constexpr bool contains_v = contains<L, T>::value;
+
 } // namespace mp
