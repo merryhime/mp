@@ -250,4 +250,19 @@ constexpr bool all_are_v = length<L>::value == count<L, T>::value;
 template <class L, class T>
 using all_are = bool_mv<all_are_v<L, T>>;
 
+namespace detail {
+
+template<typename V>
+using to_bool_mv = bool_mv<static_cast<bool>(V::value)>;
+
+} // namespace detail
+
+/// Metafunction that returns true if predicate F returns true for all elements of list L
+template <class L, template<class> class F>
+constexpr bool all_of_v = all_are_v<map<detail::to_bool_mv, map<F, L>>, true_>;
+
+/// Metafunction that returns true if predicate F returns true for all elements of list L
+template <class L, template<class> class F>
+using all_of = bool_mv<all_of_v<L, F>>;
+
 } // namespace mp
