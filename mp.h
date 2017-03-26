@@ -29,6 +29,10 @@ using false_ = bool_mv<false>;
 template<std::size_t V>
 using size_mv = std::integral_constant<std::size_t, V>;
 
+/// Casts a metavalue from one type to another
+template<class VT, class V>
+using mv_cast = std::integral_constant<VT, static_cast<VT>(V::value)>;
+
 /// Lifts a function to be a metafunction
 template <auto F>
 struct lift {
