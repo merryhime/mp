@@ -82,6 +82,15 @@ A metavalue is a type of template `std::integral_constant`.
 * `mp::map`: Apply a provided metafunction to each element of a list.
 * `mp::bind`: Curry a metafunction. A macro `MM_MP_BIND` is provided to make this a little prettier.
 
+`traits`
+--------
+
+Type traits not in the standard library.
+
+### Misc
+
+* `mp::is_instance_of_template`: Checks if a type is an instance of a template class.
+
 License
 -------
 

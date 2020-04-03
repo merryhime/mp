@@ -4,6 +4,7 @@
  */
 
 #include "metavalue_tests.h"
+#include "traits_tests.h"
 #include "typelist_tests.h"
 
 int main() {
