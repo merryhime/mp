@@ -26,7 +26,7 @@ struct cartesian_product_impl<RL> {
 template<template<class...> class LT, class... REs, class... E2s>
 struct cartesian_product_impl<LT<REs...>, LT<E2s...>> {
     using type = concat<
-        map<bind<append, REs>::template type, list<E2s...>>...
+        map<MM_MP_BIND(append, REs), list<E2s...>>...
     >;
 };
 

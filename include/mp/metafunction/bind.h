@@ -15,3 +15,5 @@ struct bind {
 };
 
 } // namespace mp
+
+#define MM_MP_BIND(...) ::mp::bind<__VA_ARGS__>::template type
