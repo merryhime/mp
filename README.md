@@ -87,6 +87,15 @@ A metavalue is a type of template `std::integral_constant`.
 
 Type traits not in the standard library.
 
+### `function_info`
+
+* `mp::parameter_count_v`: Number of parameters a function has
+* `mp::parameter_list`: Get a typelist of the parameter types
+* `mp::get_parameter`: Get the type of a parameter by index
+* `mp::equivalent_function_type`: Get an equivalent function type (for MFPs this does not include the class)
+* `mp::return_type`: Return type of the function
+* `mp::class_type`: Only valid for member function pointer types. Gets the class the member function is associated with.
+
 ### Misc
 
 * `mp::is_instance_of_template`: Checks if a type is an instance of a template class.
