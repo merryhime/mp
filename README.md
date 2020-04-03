@@ -96,6 +96,11 @@ Type traits not in the standard library.
 * `mp::return_type`: Return type of the function
 * `mp::class_type`: Only valid for member function pointer types. Gets the class the member function is associated with.
 
+### `integer_of_size`
+
+* `mp::signed_integer_of_size`: Gets a signed integer of the specified bit-size (if it exists)
+* `mp::unsigned_integer_of_size`: Gets an unsigned integer of the specified bit-size (if it exists)
+
 ### Misc
 
 * `mp::is_instance_of_template`: Checks if a type is an instance of a template class.
