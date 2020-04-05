@@ -15,7 +15,7 @@ struct contains;
 
 template<template<class...> class LT, class... Ts, class T>
 struct contains<LT<Ts...>, T>
-    : public std::bool_constant<(false || ... || std::is_same_v<Ts, T>)>
+    : std::bool_constant<(false || ... || std::is_same_v<Ts, T>)>
 {};
 
 /// Does list L contain an element which is same as type T?
