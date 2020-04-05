@@ -15,7 +15,7 @@ template<class VT, VT v>
 using value = std::integral_constant<VT, v>;
 
 /// A metavalue of type std::size_t (and value v).
-template<bool v>
+template<std::size_t v>
 using size_value = value<std::size_t, v>;
 
 /// A metavalue of type bool (and value v). (Aliases to std::bool_constant.)

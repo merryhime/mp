@@ -60,6 +60,7 @@ A metavalue is a type of template `std::integral_constant`.
 
 * mp::value: Aliases to [`std::integral_constant`](https://en.cppreference.com/w/cpp/types/integral_constant)
 * mp::bool_value: Aliases to [`std::bool_constant`](https://en.cppreference.com/w/cpp/types/integral_constant)
+* mp::size_value: Constructs a metavalue with value of type std::size_t
 * `mp::lift_value`: Lifts a value of any arbitrary type to become a metavalue
 
 ### Conversions
