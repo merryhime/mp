@@ -16,6 +16,7 @@
 #include <mp/typelist/cartesian_product.h>
 #include <mp/typelist/concat.h>
 #include <mp/typelist/contains.h>
+#include <mp/typelist/drop.h>
 #include <mp/typelist/get.h>
 #include <mp/typelist/head.h>
 #include <mp/typelist/length.h>
@@ -61,6 +62,14 @@ static_assert(contains_v<list<int>, int>);
 static_assert(!contains_v<list<>, int>);
 static_assert(!contains_v<list<double>, int>);
 static_assert(contains_v<list<double, int>, int>);
+
+// drop
+
+static_assert(std::is_same_v<list<>, drop<3, list<int, int>>>);
+static_assert(std::is_same_v<list<>, drop<3, list<int, int, int>>>);
+static_assert(std::is_same_v<list<int>, drop<3, list<int, int, int, int>>>);
+static_assert(std::is_same_v<list<double>, drop<3, list<int, int, int, double>>>);
+static_assert(std::is_same_v<list<int, double, bool>, drop<0, list<int, double, bool>>>);
 
 // get
 
